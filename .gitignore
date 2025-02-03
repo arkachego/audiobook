@@ -1,0 +1,6 @@
+/node_modules
+/repos/server/.env*
+/repos/server/node_modules
+/repos/client/.next
+/repos/client/node_modules
+/repos/client/next-env.d.ts
