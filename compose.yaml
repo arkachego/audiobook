@@ -35,11 +35,12 @@ services:
       - network
     environment:
       - DATABASE_CLIENT=pg
-      - DATABASE_HOST=localhost
+      - DATABASE_HOST=postgres
       - DATABASE_PORT=5432
       - DATABASE_NAME=audiobook
       - DATABASE_USER=audiobook
       - DATABASE_PASSWORD=audiobook
+      - AUDIOBOOK_URL=http://localhost:5000
     volumes:
       - ./repos/server:/app
     depends_on:

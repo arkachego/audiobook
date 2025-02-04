@@ -21,13 +21,20 @@ import {
 } from "@/components/ui/card";
 import Animation from "@/assets/recording.json";
 import { useToast } from "@/hooks/use-toast";
+import useSocket from "@/lib/socket";
 
 const RecorderPage: React.FC = () => {
 
   const router = useRouter();
-  const { toast } = useToast();
-  const [ stopped, setStopped ] = useState(true);
-  const [ paused, setPaused ] = useState(false);
+  const {
+    stopped,
+    paused,
+    startRecord,
+    pauseRecord,
+    resumeRecord,
+    stopRecord,
+  } = useSocket();
+  // const { toast } = useToast();
 
   // useEffect(() => {
   //   const user_id = localStorage.getItem("user_id");
@@ -42,11 +49,13 @@ const RecorderPage: React.FC = () => {
 
   const onRecordClick = () => {
     if (stopped) {
-      setStopped(false);
-      setPaused(false);
+      startRecord();
+    }
+    else if (paused) {
+      resumeRecord();
     }
     else {
-      setPaused(!paused);
+      pauseRecord();
     }
   };
 
@@ -59,8 +68,7 @@ const RecorderPage: React.FC = () => {
       // });
     }
     else {
-      setStopped(true);
-      setPaused(false);
+      stopRecord();
     }
   };
 
