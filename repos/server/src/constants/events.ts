@@ -1,10 +1,9 @@
 const value = {
   CONNECT: "connection",
   DISCONNECT: "disconnect",
-  START_RECORDING: "start-recording",     // Client to Server
-  APPEND_RECORDING: "append-recording",   // Client to Server
-  STOP_RECORDING: "stop-recording",       // Client to Server
-  RECORDING_SAVED: "recording-saved",     // Server to Client
-};
+  APPEND_RECORDING: "append-recording",
+  STOP_RECORDING: "stop-recording",
+  RECORDING_SAVED: "recording-saved",
+} as const;
 
 export default value;
