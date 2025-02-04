@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Maven_Pro } from "next/font/google";
+import { Toaster } from "@/components/ui/toaster";
 import "./globals.css";
 
 const mavenPro = Maven_Pro({
@@ -18,6 +19,7 @@ const RootLayout = ({ children }: Readonly<Props>) => {
     <html lang="en" className="w-full h-full overflow-hidden">
       <body className={`${mavenPro.className} antialiased w-full h-full m-0 overflow-hidden`}>
         {children}
+        <Toaster />
       </body>
     </html>
   );
