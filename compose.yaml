@@ -40,6 +40,7 @@ services:
       - DATABASE_NAME=audiobook
       - DATABASE_USER=audiobook
       - DATABASE_PASSWORD=audiobook
+      - SERVER_URL=http://localhost:3000
       - AUDIOBOOK_URL=http://localhost:5000
     volumes:
       - ./repos/server:/app

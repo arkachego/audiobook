@@ -11,6 +11,7 @@ export async function up(knex: Knex): Promise<void> {
       }).defaultTo(knex.raw("uuid_generate_v4()"));
       table.string("name", 50).notNullable();
       table.string("link", 250).notNullable();
+      table.uuid("user_id").notNullable().references("id").inTable(TABLES.USER);
       table.timestamps(true, true);
     });
   }

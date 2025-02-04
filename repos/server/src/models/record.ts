@@ -8,6 +8,7 @@ class Record extends Model implements RecordType {
   link!: string;
   created_at!: string;
   updated_at!: string;
+  user_id!: string;
 
   static get tableName() {
     return TABLES.RECORD;

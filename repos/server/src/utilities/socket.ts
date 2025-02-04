@@ -4,6 +4,8 @@ import Path from "path";
 import { Logger } from "winston";
 import EVENTS from "../constants/events";
 import { RecordType } from "../types";
+import { createRecord } from "../services/record";
+import Record from "../models/record";
 
 interface ClientToServerEvents {
   [EVENTS.DISCONNECT]: () => void;
@@ -12,7 +14,7 @@ interface ClientToServerEvents {
 };
 
 interface ServerToClientEvents {
-  [EVENTS.RECORDING_SAVED]: (record: RecordType) => void;
+  [EVENTS.RECORDING_SAVED]: (record: Record) => void;
 };
 
 type PayloadType = {
@@ -36,23 +38,20 @@ const withSocket = (server: object, logger: Logger) => {
     });
   
     socket.on(EVENTS.STOP_RECORDING, (payload: PayloadType) => {
-      setTimeout(() => {
+      setTimeout(async () => {
         logger.info(`recording stoped: ${socket.id} ${audioChunks.length}`);
         if (audioChunks.length > 0) {
           const pathParts = __dirname.split(Path.sep);
           pathParts[pathParts.length - 2] = "public";
           pathParts[pathParts.length - 1] = `audio_${Date.now()}.webm`;
           Fs.writeFileSync(pathParts.join(Path.sep), Buffer.concat(audioChunks));
-    
-          socket.emit(EVENTS.RECORDING_SAVED, {
-            id: '',
-            name: '',
-            link: '',
-            created_at: '',
-            updated_at: '',
+          const record = await createRecord({
+            name: pathParts[pathParts.length - 1],
+            link: `${process.env.SERVER_URL}/${pathParts[pathParts.length - 1]}`,
+            user_id: payload.user_id,
           });
+          socket.emit(EVENTS.RECORDING_SAVED, record);
           audioChunks = [];
-          // logger.info(`Audio saved: ${filename}`);
         }
       }, 1000);
     });

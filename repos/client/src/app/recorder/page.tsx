@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { Wavy } from "@/components/ui/wavy";
 import {
   Card,
@@ -12,6 +14,14 @@ import AudioRecorder from "@/components/AudioRecorder";
 
 const RecorderPage: React.FC = () => {
 
+  const router = useRouter();
+
+  useEffect(() => {
+    const user_id = localStorage.getItem("user_id");
+    if (!user_id) {
+      router.replace('/onboard');
+    }
+  }, []);
 
   return (
     <Wavy>
