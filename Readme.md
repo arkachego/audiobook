@@ -16,13 +16,13 @@ We have a few commands to work with which are listed below:
 6. `yarn logs` is used to display the logs of a module in a container when the dockerized setup is running. To get the logs for the server module, we can execute `yarn logs server`.
 7. `yarn migrate` is used to create necessary tables and relations in the underlying **PostgreSQL** database.
 
-To launch the dockerized environment for the first time, please execute:
+To launch the dockerized environment **for the first time**, please execute:
 
 ```
 yarn setup && yarn build && yarn start && yarn migrate && yarn stop && yarn start
 ```
 
-For subsequent turn on/off requirements, just use `yarn start` and `yarn stop` command.
+For subsequent turn on/off requirements, just use `yarn start` and `yarn stop` commands.
 
 #### Front-End
 
