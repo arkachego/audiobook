@@ -29,7 +29,7 @@ const OnboardPage: React.FC = () => {
         setLoading(true);
         const user = await onboardUser(name);
         localStorage.setItem("user_id", user.id);
-        router.replace("/recorder");
+        router.replace("/records");
       }
     }
     catch (error) {

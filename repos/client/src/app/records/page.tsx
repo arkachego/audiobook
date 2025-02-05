@@ -17,6 +17,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 const RecordsPage: React.FC = () => {
 
   const router = useRouter();
+  const [ height, setHeight ] = useState<number>(0);
   const [ profile, setProfile ] = useState<UserType | null>(null);
   const [ records, setRecords ] = useState<RecordType[]>([]);
 
@@ -36,6 +37,7 @@ const RecordsPage: React.FC = () => {
     const user_id = localStorage.getItem("user_id");
     if (user_id) {
       loadApiData(user_id);
+      setHeight(window.innerHeight - 153);
     }
     else {
       router.replace('/onboard');
@@ -49,7 +51,7 @@ const RecordsPage: React.FC = () => {
           <CardHeader className="p-0">
             <UserProfile profile={profile}/>
           </CardHeader>
-          <CardContent className="p-0" style={{ height: window.innerHeight - 153 }}>
+          <CardContent className="p-0" style={{ height }}>
             <ScrollArea className="w-full h-full">
               <Recordings records={records}/>
             </ScrollArea>
