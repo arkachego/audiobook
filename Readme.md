@@ -28,11 +28,17 @@ Congratulations! **AudioBook** is now hosted on http://localhost:5000. The serve
 
 It was told to use either [Vue.js](https://vuejs.org/) or any other preferred front-end framework in the requirement. I used [React.js](https://react.dev/) under [Next.js](https://nextjs.org/) as the front-end frameworks as I haven't worked with [Vue.js](https://vuejs.org/) yet. Additionally, I used [Shadcn UI](https://ui.shadcn.com/) and [TailwindCSS](https://tailwindcss.com/) for components and styling. Although a minimal UI is asked for, mine is a bit aesthetically pleasing. I have integrated [Aceternity UI](https://ui.aceternity.com/) on the front-end to do so!
 
+#### AWS Deployment Strategy
+
+Deployment of the front-end app is super easy through **AWS Amplify**. We can create an **AWS Amplify** app linking the **GitHub** repository and mapping the correct branch to deploy in the **AWS** account in the required region. Upon deployment, **AWS Amplify** provides an **URL** having a pattern of `https://<branch_name>.<random_14_chars>.amplifyapp.com`, through which we can access the app. If we want to add some custom domains, that provision is also available in **AWS Amplify**. We have to do this job in all the AWS accounts containing the `develop`, `staging` and `production` environments. Upon doing this, whenever there is a change in the linked branch in the client app, corresponding linked app in AWS Amplify will be deployed. Additionally, we have to include the URL we are using to access the front-end app in corresponding environments into the CORS settings coming from the environment variables of the server app.
+
 ### Back-End Server
 
 For the back-end I used [Node.js](https://nodejs.org/en) and [Express.js](https://expressjs.com/). Also there is a [Socket.IO](https://socket.io/) implementation to stream the audio from the client to the server.  Though we have two different apps for the server and client, I'm submitting only one [GitHub](https://github.com/arkachego/audiobook) repository containing both of them. Actually, this repository is the parent dockerized environment to run both the apps together in any local environment where [Docker](https://www.docker.com/) is running. Also there is a [PostgreSQL](https://www.postgresql.org/) database behind the server app. A separate service is listed under the `compose.yaml` file for it in this dockerized setup.
 
-### AWS Deployment
+### AWS Deployment Strategy
+
+
 
 ### Additional Thoughts
 

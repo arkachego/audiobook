@@ -1,0 +1,31 @@
+name: Deploy in Production
+on:
+  push:
+    branches:
+      - main
+permissions:
+  id-token: write
+  contents: read
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository Code
+        uses: actions/checkout@v4
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID_PROD }}:role/GitHubActionsRole
+          role-session-name: SessionForGitHubActionsRole
+          aws-region: ${{ secrets.AWS_REGION_PROD }}
+      - name: Login to AWS ECR
+        run: |
+          aws ecr get-login-password --region ${{ secrets.AWS_REGION_PROD }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID_PROD }}.dkr.ecr.${{ secrets.AWS_REGION_PROD }}.amazonaws.com
+      - name: Build and Push Docker Image
+        run: |
+          docker build -t server:latest .
+          docker tag server:latest ${{ secrets.AWS_ACCOUNT_ID_PROD }}.dkr.ecr.${{ secrets.AWS_REGION_PROD }}.amazonaws.com/server:latest
+          docker push ${{ secrets.AWS_ACCOUNT_ID_PROD }}.dkr.ecr.${{ secrets.AWS_REGION_PROD }}.amazonaws.com/server:latest
+      - name: Deploy to AWS ECS
+        run: |
+          aws ecs update-service --cluster audiobook-cluster --service server --force-new-deployment
