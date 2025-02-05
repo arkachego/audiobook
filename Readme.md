@@ -1,1 +1,1 @@
-# Audiobook: A tiny voice recorder for fun!
+# Audiobook: A tiny voice recorder app for personal use
