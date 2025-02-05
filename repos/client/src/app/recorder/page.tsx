@@ -10,7 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import AudioRecorder from "@/components/AudioRecorder";
+import Recorder from "@/components/Recorder";
 
 const RecorderPage: React.FC = () => {
 
@@ -32,7 +32,7 @@ const RecorderPage: React.FC = () => {
             <CardDescription>Record any song you love to sing!</CardDescription>
           </CardHeader>
           <CardFooter className="justify-between">
-            <AudioRecorder/>
+            <Recorder/>
           </CardFooter>
         </Card>
       </div>

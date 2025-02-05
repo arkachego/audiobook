@@ -3,7 +3,6 @@ import Fs from "fs";
 import Path from "path";
 import { Logger } from "winston";
 import EVENTS from "../constants/events";
-import { RecordType } from "../types";
 import { createRecord } from "../services/record";
 import Record from "../models/record";
 

@@ -6,6 +6,11 @@ const onboardUser = (name: string) => {
   });
 };
 
+const fetchUser = (id: string) => {
+  return User.query().findById(id);
+};
+
 export {
   onboardUser,
+  fetchUser,
 };

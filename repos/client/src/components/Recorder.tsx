@@ -11,7 +11,7 @@ import {
 } from "@tabler/icons-react";
 import { useEffect } from "react";
 
-const AudioRecorder: React.FC = () => {
+const Recorder: React.FC = () => {
 
   const {
     socket,
@@ -84,4 +84,4 @@ const AudioRecorder: React.FC = () => {
 
 };
 
-export default AudioRecorder;
+export default Recorder;
