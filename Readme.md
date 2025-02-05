@@ -12,7 +12,7 @@ We have a few commands to work with which are listed below:
 2. `yarn build` is used to create the docker images from both the apps.
 3. `yarn start` is used to create the containers from the images and finally to run them.
 4. `yarn stop` is used to stop all the running containers under this dockerized environment.
-5. `yarn list` is used to list all the running containers in the terminal.
+5. `yarn ps` is used to list all the running containers in the terminal.
 6. `yarn logs` is used to display the logs of a module in a container when the dockerized setup is running. To get the logs for the server module, we can execute `yarn logs server`.
 7. `yarn migrate` is used to create necessary tables and relations in the underlying **PostgreSQL** database.
 
@@ -31,6 +31,8 @@ It was told to use either [Vue.js](https://vuejs.org/) or any other preferred fr
 ### Back-End Server
 
 For the back-end I used [Node.js](https://nodejs.org/en) and [Express.js](https://expressjs.com/). Also there is a [Socket.IO](https://socket.io/) implementation to stream the audio from the client to the server.  Though we have two different apps for the server and client, I'm submitting only one [GitHub](https://github.com/arkachego/audiobook) repository containing both of them. Actually, this repository is the parent dockerized environment to run both the apps together in any local environment where [Docker](https://www.docker.com/) is running. Also there is a [PostgreSQL](https://www.postgresql.org/) database behind the server app. A separate service is listed under the `compose.yaml` file for it in this dockerized setup.
+
+### AWS Deployment
 
 ### Additional Thoughts
 

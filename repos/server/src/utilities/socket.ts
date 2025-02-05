@@ -1,10 +1,9 @@
 import { Server, Socket } from "socket.io";
-import Fs from "fs";
-import Path from "path";
 import { Logger } from "winston";
 import EVENTS from "../constants/events";
 import { createRecord } from "../services/record";
 import Record from "../models/record";
+import writeFile from "./writer";
 
 interface ClientToServerEvents {
   [EVENTS.DISCONNECT]: () => void;
@@ -23,7 +22,7 @@ type PayloadType = {
 const withSocket = (server: object, logger: Logger) => {
   const io = new Server(server, {
     cors: {
-      origin: 'http://client:5000',
+      origin: process.env.AUDIOBOOK_URL,
       methods: [ "GET", "POST" ]
     }
   });
@@ -40,13 +39,9 @@ const withSocket = (server: object, logger: Logger) => {
       setTimeout(async () => {
         logger.info(`recording stoped: ${socket.id} ${audioChunks.length}`);
         if (audioChunks.length > 0) {
-          const pathParts = __dirname.split(Path.sep);
-          pathParts[pathParts.length - 2] = "public";
-          pathParts[pathParts.length - 1] = `audio_${Date.now()}.webm`;
-          Fs.writeFileSync(pathParts.join(Path.sep), Buffer.concat(audioChunks));
+          const content = await writeFile(audioChunks);
           const record = await createRecord({
-            name: pathParts[pathParts.length - 1],
-            link: `${process.env.SERVER_URL}/${pathParts[pathParts.length - 1]}`,
+            ...content,
             user_id: payload.user_id,
           });
           socket.emit(EVENTS.RECORDING_SAVED, record);
