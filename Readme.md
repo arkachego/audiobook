@@ -30,7 +30,12 @@ It was told to use either [Vue.js](https://vuejs.org/) or any other preferred fr
 
 #### AWS Deployment Strategy
 
-Deployment of the front-end app is super easy through **AWS Amplify**. We can create an **AWS Amplify** app linking the **GitHub** repository and mapping the correct branch to deploy in the **AWS** account in the required region. Upon deployment, **AWS Amplify** provides an **URL** having a pattern of `https://<branch_name>.<random_14_chars>.amplifyapp.com`, through which we can access the app. If we want to add some custom domains, that provision is also available in **AWS Amplify**. We have to do this job in all the AWS accounts containing the `develop`, `staging` and `production` environments. Upon doing this, whenever there is a change in the linked branch in the client app, corresponding linked app in AWS Amplify will be deployed. Additionally, we have to include the URL we are using to access the front-end app in corresponding environments into the CORS settings coming from the environment variables of the server app.
+Deployment of the front-end app is super easy through **AWS Amplify**. We can create an **AWS Amplify** app linking the **GitHub** repository and mapping the correct branch to deploy in the **AWS** account in the required region. Upon deployment, **AWS Amplify** provides an **URL** to access the app which has the following pattern:
+
+```
+https://<branch_name>.<random_14_chars>.amplifyapp.com
+```
+If we want to add some custom domains, that provision is also available in **AWS Amplify** under the **Hosting > Custom Domains** page. We have to do this job in all the AWS accounts containing the `develop`, `staging` and `production` environments. Upon doing this, whenever there is a change in the linked branch of the client app, corresponding linked app in **AWS Amplify** will be deployed with the updated codebase. Additionally, we have to include the URL we are using to access the front-end app in corresponding environments into the CORS settings of the server app, coming from the environment variables of the same.
 
 ### Back-End Server
 
