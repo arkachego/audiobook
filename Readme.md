@@ -22,7 +22,7 @@ To launch the dockerized environment **for the first time**, please execute:
 yarn setup && yarn build && yarn start && yarn migrate && yarn stop && yarn start
 ```
 
-For subsequent turn on/off requirements, just use `yarn start` and `yarn stop` commands.
+Congratulations! AudioBook is now running in http://localhost:5000. The server is hosted on http://localhost:3000. For subsequent turn on/off requirements, just use `yarn start` and `yarn stop` commands.
 
 #### Front-End
 
