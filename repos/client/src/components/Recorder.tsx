@@ -44,13 +44,6 @@ const Recorder: React.FC = () => {
     if (recording) {
       stopRecorder();
     }
-    else {
-      // toast({
-      //   title: "Scheduled: Catch up",
-      //   description: "Friday, February 10, 2023 at 5:57 PM",
-      //   className: "text-xs p-2 h-10 min-h-[40px] w-[200px]",
-      // });
-    }
   };
 
   useEffect(() => {
@@ -64,7 +57,7 @@ const Recorder: React.FC = () => {
   return (
     <>
       <div>
-        {recording ? '00:30:24' : 'Ready!'}
+        {recording ? 'Recording...' : 'Ready!'}
       </div>
       <div>
         <div className="flex gap-2 items-center">
