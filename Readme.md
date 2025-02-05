@@ -1,6 +1,6 @@
 # AudioBook: A tiny voice recorder app for personal use
 
-> This is undoubedly the best full-stack assignment among all the others I have solved till date!
+> This full-stack assignment is undoubedly the best among all the others I have solved till date!
 
 The assignment was to build a voice recorder app utilising Vue.js or any other preferred front-end framework and Node.js or Go as the back-end framework.
 
