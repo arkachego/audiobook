@@ -8,6 +8,7 @@ import Path from "path";
 import Routes from "./routes";
 import logger, { LogStream } from "./utilities/logger";
 import withSocket from "./utilities/socket";
+import errorHandler from "./utilities/error";
 
 const app = Express();
 app.use(BodyParser.json());
@@ -26,6 +27,7 @@ if (!Fs.existsSync(publicFolder)) {
 }
 app.use(Express.static(pathParts.join(Path.sep)));
 app.use("/", Routes);
+app.use(errorHandler);
 
 const server = Http.createServer(app);
 withSocket(server, logger);

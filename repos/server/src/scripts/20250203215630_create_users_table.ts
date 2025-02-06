@@ -9,7 +9,7 @@ export async function up(knex: Knex): Promise<void> {
         primaryKey: true,
         useBinaryUuid: true,
       }).defaultTo(knex.raw("uuid_generate_v4()"));
-      table.string("name", 50).notNullable();
+      table.string("name", 20).notNullable();
       table.timestamps(true, true);
     });
   }

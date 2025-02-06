@@ -6,6 +6,7 @@ import { Beams } from "@/components/ui/beams";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Loader2 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 import {
   Card,
   CardContent,
@@ -20,6 +21,7 @@ import { onboardUser } from "./api";
 const OnboardPage: React.FC = () => {
 
   const router = useRouter();
+  const { toast } = useToast();
   const [ loading, setLoading ] = useState(false);
   const [ name, setName ] = useState("");
 
@@ -33,7 +35,10 @@ const OnboardPage: React.FC = () => {
       }
     }
     catch (error) {
-      console.error(error);
+      toast({
+        description: `Name is required and takes upto 20 characters!`,
+      });
+      setLoading(false);
     }
   };
 
