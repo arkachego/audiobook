@@ -2,7 +2,7 @@
 
 This repository is the deliverable of the full-stack assignment, linked with the recruitment process for the role of  [AWS Full Stack Lead Developer](https://apply.workable.com/expedite-commerce/j/3FC3A6AEB0/) role in **Expedite Commerce**. We have to build a voice recorder app in which the users will be able to record any audio seamlessly. They should also be able to play them anytime in the future.
 
-## 1. Source Code:
+## 1. Source Code
 
 To run this dockerized setup in your local environment, you have to:
 
@@ -92,7 +92,7 @@ The workflows to deploy new changes into the `development`, `staging` and `produ
 
 We may have implemented a matrix based single workflow file for all the three environments. But I discarded this idea and created 3 separate files to make the code concise and easy to maintain in the future.
 
-To run these workflows, we must set the GitHub Secret values properly.
+To run these workflows, we must set the **GitHub Secret** values properly.
 
 | Variable Name       | Example           |
 | ------------------- | ----------------- |
