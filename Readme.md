@@ -66,11 +66,11 @@ The `/recorder` page is designed in such a way that, when the user lands in here
 
 For the back-end I used [Node.js](https://nodejs.org/en) and [Express.js](https://expressjs.com/). Also there is a [Socket.IO](https://socket.io/) implementation to stream the audio from the client to the server.  Though we have two different apps for the server and client, I'm submitting only one [GitHub](https://github.com/arkachego/audiobook) repository containing both of them. Actually, this repository is the parent dockerized environment to run both the apps together in any local environment where [Docker](https://www.docker.com/) is running. Also there is a [PostgreSQL](https://www.postgresql.org/) database behind the server app. A separate service is listed under the `compose.yaml` file for it in this dockerized setup.
 
-Whenever the user lands into the `/recorder` page, the client app sends the `connection` event to the server. When the user initiates the recording, the client app streams the audio through the `append-recording` event. When the user clicks on the stop button, the client app sends the `stop-recording` event to the server. The server then saves the file and reverts a `recording-saved` event to the client app.
+Whenever the user lands into the `/recorder` page, the client app sends the `connection` event to the server to establish the socket connection. When the user initiates the recording, the client app streams the audio through the `append-recording` event. When the user clicks on the stop button, the client app sends the `stop-recording` event to the server. The server then saves the file and reverts a `recording-saved` event to the client app.
 
 ### AWS Deployment Strategy
 
-Unlike the client app, the automatic deployment process of the server app involves some more setup in the AWS cloud. The entire architecture of the server has been depicted 
+Unlike the client app, the automatic deployment process of the server app involves some more setup in the **AWS** cloud. The entire architecture of the server has been depicted in the diagram below.
 
 ![Alt text](assets/server-deploy-diagram.png)
 
