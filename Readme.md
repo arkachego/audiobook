@@ -49,7 +49,7 @@ Explanations of the commands are listed below:
 
 > To get the logs for the server module, we can execute `yarn logs server`.
 
-If you encounter the following error, please stop the dockerized environment, restart the **Docker Daemon** service and then start the environment again. Deleting the images of the containers generated from earlier build can may solve the problem.
+If you encounter the following error, please stop the dockerized environment, restart the **Docker Daemon** service and then start the environment again. Deleting the images of the containers generated from earlier build may also solve the problem. Otherwise, consider pruning your Docker environment.
 
 ```
 client  | yarn run v1.22.22
