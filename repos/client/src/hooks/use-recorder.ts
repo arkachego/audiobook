@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
+import { useToast } from "@/hooks/use-toast";
 import useSocket from "./use-socket";
 
 const useRecorder = () => {
@@ -7,6 +8,7 @@ const useRecorder = () => {
     stopStreaming,
     sendStreaming,
   } = useSocket();
+  const { toast } = useToast();
   const [recording, setRecording] = useState(false);
   const [paused, setPaused] = useState(false);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
@@ -41,6 +43,9 @@ const useRecorder = () => {
     if (mediaRecorder.current && mediaRecorder.current.state === "recording") {
       mediaRecorder.current.pause();
       setPaused(true);
+      toast({
+        description: `Recording has been paused!`,
+      });
     }
   };
 
@@ -48,6 +53,9 @@ const useRecorder = () => {
     if (mediaRecorder.current && mediaRecorder.current.state === "paused") {
       mediaRecorder.current.resume();
       setPaused(false);
+      toast({
+        description: `Recording has been resumed!`,
+      });
     }
   };
 
