@@ -1,50 +1,52 @@
 "use client";
 
+/**
+ * 
+ * Hook Name        : useSocket
+ * 
+ * Description      : This hook maintains the socket connection with the server and
+ *                    exports a single method to emit any event to the server along
+ *                    with the socket itself for any external event binding.
+ * 
+ */
+
 import { useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
-import { RecordType } from "@/types";
-import { useToast } from "@/hooks/use-toast";
-import EVENTS from "@/constants/events";
 
 const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:3000";
 
 const useSocket = () => {
-  const { toast } = useToast();
   const [socket, setSocket] = useState<Socket | null>(null);
 
   useEffect(() => {
-    const newSocket = io(SERVER_URL, {
-      transports: ['websocket', 'polling'],
-    });
-    newSocket.on(EVENTS.RECORDING_SAVED, (record: RecordType) => {
-      toast({
-        description: `Recording ${record.name} has been saved successfully!`,
-      });
-    });
-    setSocket(newSocket);
-    return () => {
-      newSocket.disconnect();
-    };
-  }, []);
-  
-  const stopStreaming = () => {
     if (socket) {
-      socket.emit(EVENTS.STOP_RECORDING, {
-        user_id: localStorage.getItem("user_id"),
-      });
+      if (socket.disconnected) {
+        socket.connect();
+      }
+      return () => {
+        socket.disconnect();
+      };
     }
-  };
+    else {
+      const newSocket = io(SERVER_URL, {
+        transports: ['websocket', 'polling'],
+      });
+      setSocket(newSocket);
+      return () => {
+        newSocket.disconnect();
+      };
+    }
+  }, []);
 
-  const sendStreaming = (blob: Blob) => {
+  const sendEvent = (event: string, data?: any) => {
     if (socket) {
-      socket.emit(EVENTS.APPEND_RECORDING, blob);
+      data ? socket.emit(event, data) : socket.emit(event);
     }
   };
 
   return {
     socket,
-    stopStreaming,
-    sendStreaming,
+    sendEvent,
   };
 };
 

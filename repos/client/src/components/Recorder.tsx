@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import useRecorder from "@/hooks/use-recorder";
@@ -21,10 +20,33 @@ import {
 import Lottie from "lottie-react";
 import RecordingAnimation from "@/assets/recording.json";
 
+type CentralContentType = {
+  recording: boolean;
+  paused: boolean;
+};
+
+const CentralContent: React.FC<CentralContentType> = ({ recording, paused }) => {
+
+  return recording && !paused ? (
+    <Lottie
+      loop={!paused}
+      animationData={RecordingAnimation}
+      className="w-[342px] h-[146px]"
+    />
+  ) : (
+    <div className="w-100 flex flex-col justify-between h-[146px] py-2">
+      <div className="flex gap-1">Press the <IconMicrophoneFilled/> button to initiate/resume the recording.</div>
+      <div className="flex gap-1">Press the <IconPlayerPauseFilled/> button to pause the recording.</div>
+      <div className="flex gap-1">Press the <IconPlayerStopFilled/> button to stop the recording.</div>
+      <div className="flex gap-1">Press the <IconPlaylist/> button to see all of your recordings.</div>
+    </div>
+  )
+
+};
+
 const Recorder: React.FC = () => {
 
   const {
-    socket,
     recording,
     paused,
     startRecorder,
@@ -56,14 +78,6 @@ const Recorder: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    return () => {
-      if (socket) {
-        socket.disconnect();
-      }
-    };
-  }, []);
-
   return (
     <Card className="bg-neutral-300 max-w-lg">
       <CardHeader className="pb-4">
@@ -71,21 +85,10 @@ const Recorder: React.FC = () => {
         <CardDescription>Record any song you love to sing!</CardDescription>
       </CardHeader>
       <CardContent className="bg-white">
-        {recording && !paused ? (
-          <Lottie
-            loop={!paused}
-            animationData={RecordingAnimation}
-            className="w-[342px] h-[146px]"
-          />
-        ) : (
-          <div className="w-100 flex flex-col justify-between h-[146px] py-2">
-            <div className="flex gap-1">Press the <IconMicrophoneFilled/> button to initiate/resume the recording.</div>
-            <div className="flex gap-1">Press the <IconPlayerPauseFilled/> button to pause the recording.</div>
-            <div className="flex gap-1">Press the <IconPlayerStopFilled/> button to stop the recording.</div>
-            <div className="flex gap-1">Press the <IconPlaylist/> button to see all of your recordings.</div>
-          </div>
-        )}
-        
+        <CentralContent
+          recording={recording}
+          paused={paused}
+        />
       </CardContent>
       <CardFooter className="pt-4 justify-between">
         <div>

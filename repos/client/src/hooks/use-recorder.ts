@@ -1,19 +1,39 @@
-import { useRef, useState } from 'react';
+"use client";
+
+/**
+ * 
+ * Hook Name        : useRecorder
+ * 
+ * Description      : This hook internally uses the useSocket hook to send the audio stream
+ *                    to the server. It exposes methods to start, pause, resume and stop
+ *                    recordings.
+ * 
+ */
+
+import { useEffect, useRef, useState } from 'react';
 import { useToast } from "@/hooks/use-toast";
 import useSocket from "./use-socket";
+import EVENTS from "@/constants/events";
+import { RecordType } from "@/types";
 
 const useRecorder = () => {
-  const {
-    socket,
-    stopStreaming,
-    sendStreaming,
-  } = useSocket();
   const { toast } = useToast();
+  const { socket, sendEvent } = useSocket();
   const [recording, setRecording] = useState(false);
   const [paused, setPaused] = useState(false);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const mediaRecorder = useRef<MediaRecorder | null>(null);
   const audioChunks = useRef<Blob[]>([]);
+
+  useEffect(() => {
+    if (socket) {
+      socket.on(EVENTS.RECORDING_SAVED, (record: RecordType) => {
+        toast({
+          description: `Recording ${record.name} has been saved successfully!`,
+        });
+      });
+    }
+  }, [ socket ]);
 
   const startRecorder = async () => {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -26,7 +46,7 @@ const useRecorder = () => {
     mediaRecorder.current.ondataavailable = (event) => {
       if (event.data.size > 0) {
         audioChunks.current.push(event.data);
-        sendStreaming(event.data);
+        sendEvent(EVENTS.APPEND_RECORDING, event.data);
       }
     };
 
@@ -64,7 +84,9 @@ const useRecorder = () => {
       mediaRecorder.current.stop();
       setRecording(false);
       setPaused(false);
-      stopStreaming();
+      sendEvent(EVENTS.STOP_RECORDING, {
+        user_id: localStorage.getItem("user_id"),
+      });
     }
   };
 
