@@ -86,7 +86,9 @@ We are storing the recording files in our local system inside the `/public` fold
 
 ## 3. Documentation
 
-### Front-End Client
+The feature implemention and their corresponding design decisions are documented below.
+
+### Client App
 
 It was told to use either [Vue.js](https://vuejs.org/) or any other preferred front-end framework in the requirement. I used [React.js](https://react.dev/) under [Next.js](https://nextjs.org/) as the front-end frameworks as I haven't worked with [Vue.js](https://vuejs.org/) yet. Additionally, I used [Shadcn UI](https://ui.shadcn.com/) and [TailwindCSS](https://tailwindcss.com/) for components and styling. Although a minimal UI is asked for, mine is a bit aesthetically pleasing. I have integrated [Aceternity UI](https://ui.aceternity.com/) on the front-end to do so!
 
@@ -100,8 +102,18 @@ I have divided the recording and playback functionalities among the `/records` a
 
 The `/recorder` page is designed in such a way that, when the user lands in here, the socket gets connected automatically. Whenever, user moves away from this page and the component is getting unmounted, the existing socket is being disconnected. As a result, the scope of socket connection is only inside the `/recorder` page. The other two pages are relying on one-way **REST API** requests only.
 
-### Back-End Server
+### Server App
 
 For the back-end I used [Node.js](https://nodejs.org/en) and [Express.js](https://expressjs.com/). Also there is a [Socket.IO](https://socket.io/) implementation to stream the audio from the client to the server.  Though we have two different apps for the server and client, I'm submitting only one [GitHub](https://github.com/arkachego/audiobook) repository containing both of them. Actually, this repository is the parent dockerized environment to run both the apps together in any local environment where [Docker](https://www.docker.com/) is running. Also there is a [PostgreSQL](https://www.postgresql.org/) database behind the server app. A separate service is listed under the `compose.yaml` file for it in this dockerized setup.
 
 Whenever the user lands into the `/recorder` page, the client app sends the `connection` event to the server to establish the socket connection. When the user initiates the recording, the client app streams the audio through the `append-recording` event. When the user clicks on the stop button, the client app sends the `stop-recording` event to the server. The server then saves the file and reverts a `recording-saved` event to the client app.
+
+Additionally, the server exposes **3 REST APIs**:
+
+| Endpoint       | Method | Parameters              |
+| -------------- | ------ | ----------------------- |
+| `/onboard`     | `POST` | N/A                     |
+| `/profile/:id` | `GET`  | `id` is the **User ID** |
+| `/records/:id` | `GET`  | `id` is the **User ID** |
+
+The response of the `/onboard` API contains the `user_id`, which is stored in the local storage in the browser for further use. We can implement a **JSON Web Token** based authentication here which is out of scope of this assignment.
