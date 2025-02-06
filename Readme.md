@@ -45,12 +45,12 @@ It was told to use either [Vue.js](https://vuejs.org/) or any other preferred fr
 
 #### AWS Deployment Strategy
 
-Deployment of the front-end app is super easy through **AWS Amplify**. We can create an **AWS Amplify** app linking the **GitHub** repository and mapping the correct branch to deploy in the **AWS** account in the required region. Upon deployment, **AWS Amplify** provides an **URL** to access the app which has the following pattern:
+Deployment of the front-end app can be achieved through **AWS Amplify** service. We can create an **AWS Amplify** app linking the **GitHub** repository and mapping the correct branch to deploy in the **AWS** account in the required region. Upon deployment, **AWS Amplify** provides an **URL** to access the app which has the following pattern:
 
 ```
 https://<branch_name>.<random_14_chars>.amplifyapp.com
 ```
-If we want to add some custom domains, that provision is also available in **AWS Amplify** under the **Hosting > Custom Domains** page. We have to do this job in all the **AWS** accounts containing the `develop`, `staging` and `production` environments. Upon doing this, whenever there is a change in the linked branch of the client app in **GitHub**, corresponding linked app in **AWS Amplify** will be deployed with the updated codebase automatically. In addition to that, we have to include the live **URL** of this app into the **Origin** field of the **CORS** settings in the server app to allow traffic from there. We need to set the correct environment variable of the server app to achieve it.
+If we want to add some custom domains, that provision is also available in **AWS Amplify** under the **Hosting > Custom Domains** page. We have to do this job in all the **AWS** accounts containing the `develop`, `staging` and `production` environments. Upon doing this, whenever there is a change in the linked branch of the client app in **GitHub**, corresponding linked app in **AWS Amplify** will be deployed with the updated codebase automatically. In addition to that, we have to include the **URL** of this app in the list of **Allowed Origins** of the **CORS** settings in the server app to allow the traffic from here. We need to set the correct environment variable of the server app to achieve it.
 
 The front-end app consists of 3 routes:
 
