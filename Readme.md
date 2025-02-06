@@ -1,20 +1,13 @@
 # AudioBook: A tiny voice recorder app for personal use
 
-This repository is the deliverable of the full-stack assignment, which I've been asked to solve for the [AWS Full Stack Lead Developer](https://apply.workable.com/expedite-commerce/j/3FC3A6AEB0/) role in **Re:them** under **Expedite Commerce**. In a nutshell, this assignment is asking for a voice recorder app in which the users will be able to record any audio seamlessly and also be able to play them anytime in the future.
+This repository is the deliverable of the full-stack assignment, linked with the recruitment process for the role of  [AWS Full Stack Lead Developer](https://apply.workable.com/expedite-commerce/j/3FC3A6AEB0/) role in **Expedite Commerce**. We have to build a voice recorder app in which the users will be able to record any audio seamlessly. They should also be able to play them anytime in the future.
 
-#### How to run?
+### How to run?
 
-This dockerized setup is incredibly simple to run in your local environment, provided that the Docker daemon is running, you've cloned this repository and already inside it via your preferred terminal app.
+To run this dockerized setup in your local environment, you have to:
 
-We have a few commands to work with which are listed below:
-
-1. `yarn setup` is used to install the necessary dependencies for both the server and client apps.
-2. `yarn build` is used to create the docker images from both the apps.
-3. `yarn start` is used to create the containers from the images and finally to run them.
-4. `yarn stop` is used to stop all the running containers under this dockerized environment.
-5. `yarn ps` is used to list all the running containers in the terminal.
-6. `yarn logs` is used to display the logs of a module in a container when the dockerized setup is running. To get the logs for the server module, we can execute `yarn logs server`.
-7. `yarn migrate` is used to create necessary tables and relations in the underlying **PostgreSQL** database.
+1. clone this repository and move inside it in your terminal.
+2. ensure that the Docker daemon service is running.
 
 To launch the dockerized environment **for the first time**, please execute:
 
@@ -23,6 +16,20 @@ yarn setup && yarn build && yarn start && yarn migrate && yarn stop && yarn star
 ```
 
 Congratulations! **AudioBook** is now hosted on http://localhost:5000. The server is running in http://localhost:3000. For subsequent turn on/off requirements, just use `yarn start` and `yarn stop` commands.
+
+Explanations of the commands are listed below:
+
+| Command      | Description                                                                                    |
+| ------------ | ---------------------------------------------------------------------------------------------- |
+| yarn setup   | It is used to install the necessary dependencies for both the server and client apps.          |
+| yarn build   | It is used to create the docker images from both the apps.                                     |
+| yarn start   | It is used to create the containers from the images and finally to run them.                   |
+| yarn stop    | It is used to stop all the running containers under this dockerized environment.               |
+| yarn ps      | It is used to list all the running containers in the terminal.                                 |
+| yarn logs    | It is used to display the logs of a service when the dockerized setup is running.              |
+| yarn migrate | It is used to create necessary tables and relations in the underlying **PostgreSQL** database. |
+
+> To get the logs for the server module, we can execute `yarn logs server`.
 
 ### Front-End Client
 
@@ -35,7 +42,7 @@ Deployment of the front-end app is super easy through **AWS Amplify**. We can cr
 ```
 https://<branch_name>.<random_14_chars>.amplifyapp.com
 ```
-If we want to add some custom domains, that provision is also available in **AWS Amplify** under the **Hosting > Custom Domains** page. We have to do this job in all the AWS accounts containing the `develop`, `staging` and `production` environments. Upon doing this, whenever there is a change in the linked branch of the client app, corresponding linked app in **AWS Amplify** will be deployed with the updated codebase. Additionally, we have to include the URL we are using to access the front-end app in corresponding environments into the CORS settings of the server app, coming from the environment variables of the same.
+If we want to add some custom domains, that provision is also available in **AWS Amplify** under the **Hosting > Custom Domains** page. We have to do this job in all the **AWS** accounts containing the `develop`, `staging` and `production` environments. Upon doing this, whenever there is a change in the linked branch of the client app in **GitHub**, corresponding linked app in **AWS Amplify** will be deployed with the updated codebase automatically. In addition to that, we have to include the live **URL** of this app into the **Origin** field of the **CORS** settings in the server app to allow traffic from there. We need to set the correct environment variable of the server app to achieve it.
 
 ### Back-End Server
 
@@ -43,7 +50,9 @@ For the back-end I used [Node.js](https://nodejs.org/en) and [Express.js](https:
 
 ### AWS Deployment Strategy
 
+Unlike the client app, the automatic deployment process of the server app involves some more setup in the AWS cloud. Please follow the diagram below:
 
+![Alt text](assets/server-deploy-diagram.png)
 
 ### Additional Thoughts
 
