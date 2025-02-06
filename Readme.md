@@ -99,9 +99,3 @@ In this way, we ensure that a socket is always connected to that specific contai
 In the implementation, we are utilising a **PostgreSQL** database to store the user details and the metadata of the records. We have to link an **AWS RDS** instance to our server to serve this purpose.
 
 We are storing the recording files in our local system inside the `/public` folder, which is being statically served by the **Express** app. We must implement a new function to store them in an **AWS S3** bucket for the environments we deploy in the cloud.
-
-### Additional Thoughts
-
-
-
-> This full-stack assignment is undoubedly the best one among all the others I have solved till date!
