@@ -64,7 +64,7 @@ The front-end app consists of 3 routes:
 
 I have divided the recording and playback functionalities among the `/records` and `/recorder` pages respectively. This has been done to implement a **Separation of Concern** between two specific actions over the whole functionality.
 
-The `/recorder` page is designed in such a way that, when the user lands in here, the socket gets connected automatically. Whenever, user moves away from this page and the component is getting unmounted, the existing socket is being disconnected. As a result, the scope of socket connection is only inside the `/recorder` page. The other two pages are relying on **REST API** requests.
+The `/recorder` page is designed in such a way that, when the user lands in here, the socket gets connected automatically. Whenever, user moves away from this page and the component is getting unmounted, the existing socket is being disconnected. As a result, the scope of socket connection is only inside the `/recorder` page. The other two pages are relying on one-way **REST API** requests only.
 
 ### Back-End Server
 
@@ -89,6 +89,8 @@ On the other side, the **Application Load Balancer** receives the requests from 
 The socket connection between the server and the client is a stateful session which must be maintained during the entire recording phase. Hence, while implementing the horizontal scalability of our server app, we have to enable **Stickiness** in the underlying **Target Group** of the **Application Load Balancer**.
 
 ![Alt text](assets/target-group-stickiness.png)
+
+In this way, we ensure that a socket is always connected to that specific container from where it has achieved the connection throughout it's entire lifetime. If the request volume increases, horizontal auto-scaling takes place automatically without disrupting already existing connections sticked to the corresponding containers.
 
 >  This settings is not available while creating the **Target Group**. It can be done after the creation and can be found in the **Attributes** menu under **Target Selection Configuration** settings.
 
