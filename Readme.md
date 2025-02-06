@@ -11,7 +11,7 @@ To run this dockerized setup in your local environment, you have to:
 ```
 git clone git@github.com:arkachego/audiobook.git
 ```
-2. ensure that Docker is installed and the **Docker Daemon Service** is running.
+2. ensure that **Docker** is installed and the **Docker Daemon Service** is running.
 
 ```
 docker --version
@@ -83,6 +83,27 @@ In this way, we ensure that a socket is always connected to that specific contai
 In the implementation, we are utilising a **PostgreSQL** database to store the user details and the metadata of the records. We have to link an **AWS RDS** instance to our server to serve this purpose.
 
 We are storing the recording files in our local system inside the `/public` folder, which is being statically served by the **Express** app. We must implement a new function to store them in an **AWS S3** bucket for the environments we deploy in the cloud.
+
+#### GitHub Actions
+
+The workflows to deploy new changes into the `development`, `staging` and `production` environments are residing inside the `repos/server/.github/workflows` folder.
+
+[Sample Workflow](repos/server/.github/workflows/develop.yml)
+
+We may have implemented a matrix based single workflow file for all the three environments. But I discarded this idea and created 3 separate files to make the code concise and easy to maintain in the future.
+
+To run these workflows, we must set the GitHub Secret values properly.
+
+| Variable Name       | Example           |
+| ------------------- | ----------------- |
+| AWS_ACCOUNT_ID_DEV  | 123456789012      |
+| AWS_REGION_DEV      | us-east-2         |
+| AWS_ACCOUNT_ID_STG  | 234567890123      |
+| AWS_REGION_STG      | ap-southeast-1    |
+| AWS_ACCOUNT_ID_PROD | 345678901234      |
+| AWS_REGION_PROD     | ap-south-1        |
+| AWS_ECS_CLUSTER     | audiobook-cluster |
+| AWS_ECS_SERVICE     | audiobook-service |
 
 ## 3. Documentation
 
