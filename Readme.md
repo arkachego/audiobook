@@ -2,7 +2,7 @@
 
 This repository is the deliverable of the full-stack assignment, linked with the recruitment process for the role of  [AWS Full Stack Lead Developer](https://apply.workable.com/expedite-commerce/j/3FC3A6AEB0/) role in **Expedite Commerce**. We have to build a voice recorder app in which the users will be able to record any audio seamlessly. They should also be able to play them anytime in the future.
 
-### How to run?
+### 1. Source Code:
 
 To run this dockerized setup in your local environment, you have to:
 
@@ -43,19 +43,6 @@ Explanations of the commands are listed below:
 
 It was told to use either [Vue.js](https://vuejs.org/) or any other preferred front-end framework in the requirement. I used [React.js](https://react.dev/) under [Next.js](https://nextjs.org/) as the front-end frameworks as I haven't worked with [Vue.js](https://vuejs.org/) yet. Additionally, I used [Shadcn UI](https://ui.shadcn.com/) and [TailwindCSS](https://tailwindcss.com/) for components and styling. Although a minimal UI is asked for, mine is a bit aesthetically pleasing. I have integrated [Aceternity UI](https://ui.aceternity.com/) on the front-end to do so!
 
-#### AWS Deployment Strategy
-
-Deployment of the front-end app can be achieved through **AWS Amplify** service. We can create an **AWS Amplify** app linking the **GitHub** repository and mapping the correct branch to deploy in the **AWS** account in the required region. Upon deployment, **AWS Amplify** provides an **URL** to access the app which has the following pattern:
-
-```
-https://<branch_name>.<random_14_chars>.amplifyapp.com
-```
-If we want to add some custom domains, that provision is also available in **AWS Amplify** under the **Hosting > Custom Domains** page. We have to do this job in all the **AWS** accounts containing the `develop`, `staging` and `production` environments.
-
-In addition to that, we have to include the **URL** of this app in the list of **Allowed Origins** of the **CORS** settings in the server app to allow the traffic from here. We need to set the correct environment variable of the server app to achieve it.
-
-As **AWS Amplify** listens the changes in the codebase, whenever there is a change in the linked branch of the client app in **GitHub**, corresponding linked app in **AWS Amplify** will be deployed with the updated codebase automatically.
-
 The front-end app consists of 3 routes:
 
 1. `/onboard`: This page contains a single input field where the user needs to enter his/her name.
@@ -72,7 +59,24 @@ For the back-end I used [Node.js](https://nodejs.org/en) and [Express.js](https:
 
 Whenever the user lands into the `/recorder` page, the client app sends the `connection` event to the server to establish the socket connection. When the user initiates the recording, the client app streams the audio through the `append-recording` event. When the user clicks on the stop button, the client app sends the `stop-recording` event to the server. The server then saves the file and reverts a `recording-saved` event to the client app.
 
-### AWS Deployment Strategy
+### 2. AWS Deployment Strategy
+
+The deployment strategies for both the client and the server app have been described below.
+
+#### Client App
+
+Deployment of the front-end app can be achieved through **AWS Amplify** service. We can create an **AWS Amplify** app linking the **GitHub** repository and mapping the correct branch to deploy in the **AWS** account in the required region. Upon deployment, **AWS Amplify** provides an **URL** to access the app which has the following pattern:
+
+```
+https://<branch_name>.<random_14_chars>.amplifyapp.com
+```
+If we want to add some custom domains, that provision is also available in **AWS Amplify** under the **Hosting > Custom Domains** page. We have to do this job in all the **AWS** accounts containing the `develop`, `staging` and `production` environments.
+
+In addition to that, we have to include the **URL** of this app in the list of **Allowed Origins** of the **CORS** settings in the server app to allow the traffic from here. We need to set the correct environment variable of the server app to achieve it.
+
+As **AWS Amplify** listens the changes in the codebase, whenever there is a change in the linked branch of the client app in **GitHub**, corresponding linked app in **AWS Amplify** will be deployed with the updated codebase automatically.
+
+#### Server App
 
 Unlike the client app, the automatic deployment process of the server app involves some more setup in the **AWS** cloud. The entire architecture of the server has been depicted in the diagram below.
 
@@ -94,7 +98,7 @@ In this way, we ensure that a socket is always connected to that specific contai
 
 >  This settings is not available while creating the **Target Group**. It can be done after the creation and can be found in the **Attributes** menu under **Target Selection Configuration** settings.
 
-#### Additional Services
+##### Additional Services
 
 In the implementation, we are utilising a **PostgreSQL** database to store the user details and the metadata of the records. We have to link an **AWS RDS** instance to our server to serve this purpose.
 
