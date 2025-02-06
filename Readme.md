@@ -78,9 +78,11 @@ Unlike the client app, the automatic deployment process of the server app involv
 
 ![Alt text](assets/server-deploy-diagram.png)
 
-We have an ECS cluster which contains our server app as a service. Internally, one or more EC2 instances are created based on the horizontal scaling settings we have provided in the cluster utilising the Auto-Scaling Group mechanism. The service tasks are deployed in multiple containers inside the EC2 instances.
+We have an **ECS** cluster which contains our server app as a service. The **ECS** service is linked with **Task Definitions**, which contain the environment variables for our servers.
 
-On the other hand, the **Application Load Balancer** receives the requests from the client app and forwards them to the linked **Target Group**. The linked **Target Group** consists of the **EC2** instances, created by the **ECS** cluster.
+Internally, one or more **EC2** instances are created based on the horizontal scaling settings we have provided in the cluster utilising the **Auto-Scaling Group** mechanism. The service tasks are deployed in multiple containers inside the **EC2** instances.
+
+On the other side, the **Application Load Balancer** receives the requests from the client app and forwards them to the linked **Target Group**. The linked **Target Group** consists of the **EC2** instances, created by the **ECS** cluster.
 
 #### Enable Stickiness
 
@@ -98,6 +100,6 @@ We are storing the recording files in our local system inside the `/public` fold
 
 ### Additional Thoughts
 
-In real situation, the server and client apps must reside in two separate repositories and the dockerized environment should be another different one. In this setup, we need to write more scripts to clone the linked repositories, installing the dependencies of the same, building them and finally make them live in the dockerized environment. 
+
 
 > This full-stack assignment is undoubedly the best one among all the others I have solved till date!
