@@ -1,6 +1,6 @@
 # AudioBook: A tiny voice recorder app for personal use
 
-This repository is the deliverable of the full-stack assignment, linked with the recruitment process for the role of  [AWS Full Stack Lead Developer](https://apply.workable.com/expedite-commerce/j/3FC3A6AEB0/) role in **Expedite Commerce**. We have to build a voice recorder app in which the users will be able to record any audio seamlessly. They should also be able to play them anytime in the future.
+This repository is the deliverable of the full-stack assignment, linked with the recruitment process for the role of  [AWS Full Stack Lead Developer](https://apply.workable.com/expedite-commerce/j/3FC3A6AEB0/) role in **Expedite Commerce**. We have to build a voice recorder app in which the users will be able to record any audio seamlessly. They should also be able to play them anytime in the future. You can check this [Loom Video](https://www.loom.com/embed/e129a4ca48104279b6b9d5b8e3fd7345?sid=92405318-6a07-4907-aab9-2c257c0baa28) out to experience the demonstration I've created for my app.
 
 ## 1. Source Code
 
