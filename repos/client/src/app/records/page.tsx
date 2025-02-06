@@ -37,7 +37,7 @@ const RecordsPage: React.FC = () => {
     const user_id = localStorage.getItem("user_id");
     if (user_id) {
       loadApiData(user_id);
-      setHeight(window.innerHeight - 153);
+      setHeight(window.innerHeight - 154);
     }
     else {
       router.replace('/onboard');
@@ -53,7 +53,9 @@ const RecordsPage: React.FC = () => {
           </CardHeader>
           <CardContent className="p-0" style={{ height }}>
             <ScrollArea className="w-full h-full">
-              <Recordings records={records}/>
+              <div className="p-2">
+                <Recordings records={records}/>
+              </div>
             </ScrollArea>
           </CardContent>
         </Card>
