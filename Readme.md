@@ -60,17 +60,29 @@ For the back-end I used [Node.js](https://nodejs.org/en) and [Express.js](https:
 
 Whenever the user lands into the `/recorder` page, the client app sends the `connection` event to the server. When the user initiates the recording, the client app streams the audio through the `append-recording` event. When the user clicks on the stop button, the client app sends the `stop-recording` event to the server. The server then saves the file and reverts a `recording-saved` event to the client app.
 
-We can say that, the socket connection is a stateful session which must be maintained during the recording phase. Hence, while implementing the horizontal scalability of our server app, we have to enable **Stickiness** in the underlying **Target Group** of the **Application Load Balancer**.
+### AWS Deployment Strategy
+
+Unlike the client app, the automatic deployment process of the server app involves some more setup in the AWS cloud. The entire architecture of the server has been depicted 
+
+![Alt text](assets/server-deploy-diagram.png)
+
+We have an ECS cluster which contains our server app as a service. Internally, one or more EC2 instances are created based on the horizontal scaling settings we have provided in the cluster utilising the Auto-Scaling Group mechanism. The service tasks are deployed in multiple containers inside the EC2 instances.
+
+On the other hand, the **Application Load Balancer** receives the requests from the client app and forwards them to the linked **Target Group**. The linked **Target Group** consists of the **EC2** instances, created by the **ECS** cluster.
+
+#### Enable Stickiness
+
+The socket connection between the server and the client is a stateful session which must be maintained during the entire recording phase. Hence, while implementing the horizontal scalability of our server app, we have to enable **Stickiness** in the underlying **Target Group** of the **Application Load Balancer**.
 
 ![Alt text](assets/target-group-stickiness.png)
 
 >  This settings is not available while creating the **Target Group**. It can be done after the creation and can be found in the **Attributes** menu under **Target Selection Configuration** settings.
 
-### AWS Deployment Strategy
+#### Additional Services
 
-Unlike the client app, the automatic deployment process of the server app involves some more setup in the AWS cloud. Please follow the diagram below:
+In the implementation, we are utilising a **PostgreSQL** database to store the user details and the metadata of the records. We have to link an **AWS RDS** instance to our server to serve this purpose.
 
-![Alt text](assets/server-deploy-diagram.png)
+We are storing the recording files in our local system inside the `/public` folder, which is being statically served by the **Express** app. We must implement a new function to store them in an **AWS S3** bucket for the environments we deploy in the cloud.
 
 ### Additional Thoughts
 
