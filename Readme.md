@@ -7,7 +7,15 @@ This repository is the deliverable of the full-stack assignment, linked with the
 To run this dockerized setup in your local environment, you have to:
 
 1. clone this repository and move inside it in your terminal.
-2. ensure that the Docker daemon service is running.
+
+```
+git clone git@github.com:arkachego/audiobook.git
+```
+2. ensure that Docker is installed and the **Docker Daemon Service** is running.
+
+```
+docker --version
+```
 
 To launch the dockerized environment **for the first time**, please execute:
 
