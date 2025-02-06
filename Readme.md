@@ -147,4 +147,4 @@ Additionally, the server exposes **3 REST APIs**:
 | `/profile/:id` | `GET`  | `id` is the **User ID** |
 | `/records/:id` | `GET`  | `id` is the **User ID** |
 
-The response of the `/onboard` API contains the `user_id`, which is stored in the local storage in the browser for further use. We can implement a **JSON Web Token** based authentication here which is out of scope of this assignment.
+The response of the `/onboard` API contains the `user_id`, which is stored in the local storage in the browser for further use. We can implement a **JSON Web Token** or **OAuth2** based authentication here which is out of scope of this assignment.
