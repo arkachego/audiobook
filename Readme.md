@@ -44,9 +44,27 @@ https://<branch_name>.<random_14_chars>.amplifyapp.com
 ```
 If we want to add some custom domains, that provision is also available in **AWS Amplify** under the **Hosting > Custom Domains** page. We have to do this job in all the **AWS** accounts containing the `develop`, `staging` and `production` environments. Upon doing this, whenever there is a change in the linked branch of the client app in **GitHub**, corresponding linked app in **AWS Amplify** will be deployed with the updated codebase automatically. In addition to that, we have to include the live **URL** of this app into the **Origin** field of the **CORS** settings in the server app to allow traffic from there. We need to set the correct environment variable of the server app to achieve it.
 
+The front-end app consists of 3 routes:
+
+1. `/onboard`: This page contains a single input field where the user needs to enter his/her name.
+2. `/records`: This page contains all the records the user has made till now sorted in decending order of the date of creation. The latest one comes first.
+3. `/recorder`: This page is the audio recorder engine which communicates with the server using socket connections.
+
+I have divided the recording and playback functionalities among the `/records` and `/recorder` pages respectively. This has been done to implement a **Separation of Concern** between two specific actions over the whole functionality.
+
+The `/recorder` page is designed in such a way that, when the user lands in here, the socket gets connected automatically. Whenever, user moves away from this page and the component is getting unmounted, the existing socket is being disconnected. As a result, the scope of socket connection is only inside the `/recorder` page. The other two pages are relying on **REST API** requests.
+
 ### Back-End Server
 
 For the back-end I used [Node.js](https://nodejs.org/en) and [Express.js](https://expressjs.com/). Also there is a [Socket.IO](https://socket.io/) implementation to stream the audio from the client to the server.  Though we have two different apps for the server and client, I'm submitting only one [GitHub](https://github.com/arkachego/audiobook) repository containing both of them. Actually, this repository is the parent dockerized environment to run both the apps together in any local environment where [Docker](https://www.docker.com/) is running. Also there is a [PostgreSQL](https://www.postgresql.org/) database behind the server app. A separate service is listed under the `compose.yaml` file for it in this dockerized setup.
+
+Whenever the user lands into the `/recorder` page, the client app sends the `connection` event to the server. When the user initiates the recording, the client app streams the audio through the `append-recording` event. When the user clicks on the stop button, the client app sends the `stop-recording` event to the server. The server then saves the file and reverts a `recording-saved` event to the client app.
+
+We can say that, the socket connection is a stateful session which must be maintained during the recording phase. Hence, while implementing the horizontal scalability of our server app, we have to enable **Stickiness** in the underlying **Target Group** of the **Application Load Balancer**.
+
+![Alt text](assets/target-group-stickiness.png)
+
+>  This settings is not available while creating the **Target Group**. It can be done after the creation and can be found in the **Attributes** menu under **Target Selection Configuration** settings.
 
 ### AWS Deployment Strategy
 
