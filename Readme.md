@@ -50,7 +50,11 @@ Deployment of the front-end app can be achieved through **AWS Amplify** service.
 ```
 https://<branch_name>.<random_14_chars>.amplifyapp.com
 ```
-If we want to add some custom domains, that provision is also available in **AWS Amplify** under the **Hosting > Custom Domains** page. We have to do this job in all the **AWS** accounts containing the `develop`, `staging` and `production` environments. Upon doing this, whenever there is a change in the linked branch of the client app in **GitHub**, corresponding linked app in **AWS Amplify** will be deployed with the updated codebase automatically. In addition to that, we have to include the **URL** of this app in the list of **Allowed Origins** of the **CORS** settings in the server app to allow the traffic from here. We need to set the correct environment variable of the server app to achieve it.
+If we want to add some custom domains, that provision is also available in **AWS Amplify** under the **Hosting > Custom Domains** page. We have to do this job in all the **AWS** accounts containing the `develop`, `staging` and `production` environments.
+
+In addition to that, we have to include the **URL** of this app in the list of **Allowed Origins** of the **CORS** settings in the server app to allow the traffic from here. We need to set the correct environment variable of the server app to achieve it.
+
+As **AWS Amplify** listens the changes in the codebase, whenever there is a change in the linked branch of the client app in **GitHub**, corresponding linked app in **AWS Amplify** will be deployed with the updated codebase automatically.
 
 The front-end app consists of 3 routes:
 
