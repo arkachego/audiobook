@@ -19,6 +19,7 @@ import {
 } from "@tabler/icons-react";
 import Lottie from "lottie-react";
 import RecordingAnimation from "@/assets/recording.json";
+import { useCallback } from "react";
 
 type CentralContentType = {
   recording: boolean;
@@ -56,11 +57,7 @@ const Recorder: React.FC = () => {
   } = useRecorder();
   const router = useRouter();
 
-  const onPlaylistClick = () => {
-    router.push("/records");
-  };
-
-  const onRecordClick = () => {
+  const onRecordClick = useCallback(() => {
     if (paused) {
       resumeRecorder();
     }
@@ -70,13 +67,13 @@ const Recorder: React.FC = () => {
     else {
       startRecorder();
     }
-  };
+  }, [ recording, paused, startRecorder, pauseRecorder, resumeRecorder ]);
 
-  const onStopClick = () => {
+  const onStopClick = useCallback(() => {
     if (recording) {
       stopRecorder();
     }
-  };
+  }, [ recording, stopRecorder ]);
 
   return (
     <Card className="bg-neutral-300 max-w-lg">
@@ -96,13 +93,13 @@ const Recorder: React.FC = () => {
         </div>
         <div>
           <div className="flex gap-2 items-center">
-            <Button size="icon" onClick={onPlaylistClick} className="w-7 h-7">
+            <Button size="icon" onClick={() => router.push("/records")} className="w-7 h-7" aria-label="Open playlist" disabled={recording || paused}>
               <IconPlaylist/>
             </Button>
-            <Button size="icon" onClick={onRecordClick} className="w-10 h-10">
+            <Button size="icon" onClick={onRecordClick} className="w-10 h-10" aria-label={recording && !paused ? "Pause recording" : "Start recording"}>
               {recording && !paused ? <IconPlayerPauseFilled/> : <IconMicrophoneFilled/>}
             </Button>
-            <Button size="icon" onClick={onStopClick} className="w-7 h-7">
+            <Button size="icon" onClick={onStopClick} className="w-7 h-7" aria-label="Stop recording" disabled={!recording}>
               <IconPlayerStopFilled/>
             </Button>
           </div>
