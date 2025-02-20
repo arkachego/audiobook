@@ -1,5 +1,6 @@
 "use client";
 
+import { useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import useRecorder from "@/hooks/use-recorder";
@@ -19,7 +20,6 @@ import {
 } from "@tabler/icons-react";
 import Lottie from "lottie-react";
 import RecordingAnimation from "@/assets/recording.json";
-import { useCallback } from "react";
 
 type CentralContentType = {
   recording: boolean;
