@@ -5,18 +5,22 @@ import { createRecord } from "../services/record";
 import Record from "../models/record";
 import writeFile from "./writer";
 
+type AppendRecordingPayloadType = {
+  data: Buffer;
+  final: boolean;
+};
+
+type StopRecordingPayloadType = {
+  user_id: string;
+};
 interface ClientToServerEvents {
   [EVENTS.DISCONNECT]: () => void;
-  [EVENTS.APPEND_RECORDING]: (chunk: Buffer) => void;
-  [EVENTS.STOP_RECORDING]: (payload: PayloadType) => void;
+  [EVENTS.APPEND_RECORDING]: (payload: AppendRecordingPayloadType) => void;
+  [EVENTS.STOP_RECORDING]: (payload: StopRecordingPayloadType) => void;
 };
 
 interface ServerToClientEvents {
   [EVENTS.RECORDING_SAVED]: (record: Record) => void;
-};
-
-type PayloadType = {
-  user_id: string;
 };
 
 const withSocket = (server: object, logger: Logger) => {
@@ -29,28 +33,42 @@ const withSocket = (server: object, logger: Logger) => {
   io.on(EVENTS.CONNECT, (socket: Socket<ClientToServerEvents, ServerToClientEvents>) => {
     logger.info(`Client connected: ${socket.id}`);
   
+    let lastChunk: boolean = false;
     let audioChunks: Buffer[] = [];
 
-    socket.on(EVENTS.APPEND_RECORDING, (chunk: Buffer) => {
-      audioChunks.push(chunk);
+    socket.on(EVENTS.APPEND_RECORDING, (payload: AppendRecordingPayloadType) => {
+      const { data, final } = payload;
+      if (final) {
+        lastChunk = true;
+        logger.info(`last chunk received`);
+      }
+      else {
+        audioChunks.push(data);
+        logger.info(`chunk appened: ${socket.id} ${audioChunks.length} chunks`);
+      }
     });
   
-    socket.on(EVENTS.STOP_RECORDING, (payload: PayloadType) => {
-      setTimeout(async () => {
-        logger.info(`recording stoped: ${socket.id} ${audioChunks.length}`);
-        if (audioChunks.length > 0) {
-          const content = await writeFile(audioChunks);
-          const record = await createRecord({
-            ...content,
-            user_id: payload.user_id,
-          });
-          socket.emit(EVENTS.RECORDING_SAVED, record);
-          audioChunks = [];
+    socket.on(EVENTS.STOP_RECORDING, (payload: StopRecordingPayloadType) => {
+      const checkChunks = setInterval(async () => {
+        if (lastChunk) {
+          clearInterval(checkChunks);
+          logger.info(`recording stoped: ${socket.id} ${audioChunks.length}`);
+          if (audioChunks.length > 0) {
+            const content = await writeFile(audioChunks);
+            const record = await createRecord({
+              ...content,
+              user_id: payload.user_id,
+            });
+            socket.emit(EVENTS.RECORDING_SAVED, record);
+            audioChunks = [];
+          }
         }
-      }, 1000);
+      }, 500);
     });
   
     socket.on(EVENTS.DISCONNECT, () => {
+      lastChunk = false;
+      audioChunks = [];
       logger.info(`Client disconnected: ${socket.id}`);
     });
   });

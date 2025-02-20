@@ -56,16 +56,14 @@ const useRecorder = () => {
       mediaRecorder.current.ondataavailable = (event) => {
         if (event.data.size > 0) {
           audioChunks.current.push(event.data);
-          sendEvent(EVENTS.APPEND_RECORDING, event.data);
+          sendEvent(EVENTS.APPEND_RECORDING, {
+            data: event.data,
+            final: false,
+          });
         }
       };
   
-      mediaRecorder.current.onstop = () => {
-        stream.getTracks().forEach(track => track.stop());
-      };
-  
       mediaRecorder.current.start();
-
     }
     catch (error) {
       toast({
@@ -97,12 +95,18 @@ const useRecorder = () => {
 
   const stopRecorder = () => {
     if (mediaRecorder.current) {
+      mediaRecorder.current.onstop = () => {
+        sendEvent(EVENTS.APPEND_RECORDING, {
+          data: null,
+          final: true,
+        });
+        sendEvent(EVENTS.STOP_RECORDING, {
+          user_id: userId,
+        });
+      };
       mediaRecorder.current.stop();
       setRecording(false);
       setPaused(false);
-      sendEvent(EVENTS.STOP_RECORDING, {
-        user_id: userId,
-      });
     }
   };
 
