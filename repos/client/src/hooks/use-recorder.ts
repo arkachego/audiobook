@@ -19,44 +19,58 @@ import { RecordType } from "@/types";
 const useRecorder = () => {
   const { toast } = useToast();
   const { socket, sendEvent } = useSocket();
-  const [recording, setRecording] = useState(false);
-  const [paused, setPaused] = useState(false);
-  const [audioUrl, setAudioUrl] = useState<string | null>(null);
+  const [recording, setRecording] = useState<boolean>(false);
+  const [paused, setPaused] = useState<boolean>(false);
+  const [userId, setUserId] = useState<string | null>(null);
   const mediaRecorder = useRef<MediaRecorder | null>(null);
   const audioChunks = useRef<Blob[]>([]);
 
+  const handleRecordSave = (record: RecordType) => {
+    toast({
+      description: `Recording ${record.name} has been saved successfully!`,
+    });
+  };
+
+  useEffect(() => {
+    setUserId(localStorage.getItem("user_id"));
+    return () => {
+      socket?.off(EVENTS.RECORDING_SAVED, handleRecordSave);
+    };
+  }, []);
+
   useEffect(() => {
     if (socket) {
-      socket.on(EVENTS.RECORDING_SAVED, (record: RecordType) => {
-        toast({
-          description: `Recording ${record.name} has been saved successfully!`,
-        });
-      });
+      socket.on(EVENTS.RECORDING_SAVED, handleRecordSave);
     }
   }, [ socket ]);
 
   const startRecorder = async () => {
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-
-    mediaRecorder.current = new MediaRecorder(stream);
-    setRecording(true);
-    setPaused(false);
-    audioChunks.current = [];
-
-    mediaRecorder.current.ondataavailable = (event) => {
-      if (event.data.size > 0) {
-        audioChunks.current.push(event.data);
-        sendEvent(EVENTS.APPEND_RECORDING, event.data);
-      }
-    };
-
-    mediaRecorder.current.onstop = () => {
-      const audioBlob = new Blob(audioChunks.current, { type: 'audio/wav' });
-      const url = URL.createObjectURL(audioBlob);
-      setAudioUrl(url);
-    };
-
-    mediaRecorder.current.start();
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+  
+      mediaRecorder.current = new MediaRecorder(stream);
+      setRecording(true);
+      setPaused(false);
+      audioChunks.current = [];
+  
+      mediaRecorder.current.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          audioChunks.current.push(event.data);
+          sendEvent(EVENTS.APPEND_RECORDING, {
+            data: event.data,
+            final: false,
+          });
+        }
+      };
+  
+      mediaRecorder.current.start();
+    }
+    catch (error) {
+      toast({
+        description: "Microphone access denied! Please allow access to record audio.",
+        variant: "destructive",
+      });
+    }
   };
 
   const pauseRecorder = () => {
@@ -81,12 +95,18 @@ const useRecorder = () => {
 
   const stopRecorder = () => {
     if (mediaRecorder.current) {
+      mediaRecorder.current.onstop = () => {
+        sendEvent(EVENTS.APPEND_RECORDING, {
+          data: null,
+          final: true,
+        });
+        sendEvent(EVENTS.STOP_RECORDING, {
+          user_id: userId,
+        });
+      };
       mediaRecorder.current.stop();
       setRecording(false);
       setPaused(false);
-      sendEvent(EVENTS.STOP_RECORDING, {
-        user_id: localStorage.getItem("user_id"),
-      });
     }
   };
 
@@ -94,7 +114,6 @@ const useRecorder = () => {
     socket,
     recording,
     paused,
-    audioUrl,
     startRecorder,
     pauseRecorder,
     resumeRecorder,

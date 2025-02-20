@@ -15,39 +15,41 @@ import { io, Socket } from "socket.io-client";
 
 const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:3000";
 
+let instance: Socket | null = null;
+
 const useSocket = () => {
   const [socket, setSocket] = useState<Socket | null>(null);
 
   useEffect(() => {
-    if (socket) {
-      if (socket.disconnected) {
-        socket.connect();
-      }
-      return () => {
-        socket.disconnect();
-      };
-    }
-    else {
-      const newSocket = io(SERVER_URL, {
-        transports: ['websocket', 'polling'],
+    if (!instance) {
+      instance = io(SERVER_URL, {
+        transports: ["websocket", "polling"],
       });
-      setSocket(newSocket);
-      return () => {
-        newSocket.disconnect();
-      };
     }
+
+    instance.on("connect_error", (error) => {
+      console.error("Socket connection error: ", error);
+    });
+    instance.on("disconnect", (reason) => {
+      console.warn("Socket disconnected: ", reason);
+    });
+
+    setSocket(instance);
+
+    return () => {
+      if (instance) {
+        instance.off();
+        instance.disconnect();
+        instance = null;
+      }
+    };
   }, []);
 
   const sendEvent = (event: string, data?: any) => {
-    if (socket) {
-      data ? socket.emit(event, data) : socket.emit(event);
-    }
+    socket?.emit(event, data);
   };
 
-  return {
-    socket,
-    sendEvent,
-  };
+  return { socket, sendEvent };
 };
 
 export default useSocket;
